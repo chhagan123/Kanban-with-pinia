@@ -1,5 +1,9 @@
 <script setup>
 import { ref } from "vue";
+import { useKanbanStore } from "../../store/KanbanStore";
+
+// crud store
+const TaskStore = useKanbanStore();
 
 const props = defineProps({
   columnId: {
@@ -31,7 +35,7 @@ function AddTask() {
     columnId: props.columnId,
   };
   emit("addTask", Task);
-  // emit("close"); // Emitting close after adding the task
+  emit("close"); // Emitting close after adding the task
 }
 </script>
 
@@ -78,7 +82,7 @@ function AddTask() {
         <div class="flex justify-end gap-3">
           <button
             type="button"
-            @click="close"
+            @click="TaskStore.toggleAddTask()"
             class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
           >
             Cancel

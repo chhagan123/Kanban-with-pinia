@@ -7,6 +7,13 @@ export const useKanbanStore = defineStore("kanbanStore", () => {
   const showEdit = ref(false);
   const selecTedTask = ref(null);
 
+
+  // toggle addTask model 
+  function toggleAddTask() {
+    showTask.value = !showTask.value;
+    console.log(showTask.value);
+  }
+
   //  Add Task
   function handleAddTask(newTask) {
     tasks.value.push(newTask);
@@ -69,5 +76,6 @@ export const useKanbanStore = defineStore("kanbanStore", () => {
     editTask,
     selecTedTask,
     updateTask,
+    toggleAddTask
   };
 });

@@ -15,20 +15,11 @@ const columnRef = ref(null);
 const searchTerm = ref("");
 const searchAssignee = ref("");
 
-const selectedTask = ref(null);
-
-const theme = ref(true);
-
 // CRUD Task Store
 
 const TaskStore = useKanbanStore();
 
 // -------------------- Functions --------------------
-
-// Theme toggle
-function toggleTheme() {
-  theme.value = !theme.value;
-}
 
 // Search
 function handleSearch(query) {
@@ -49,9 +40,9 @@ function toggleColumnModal() {
 }
 
 // Task updates
-// function updateTasks(newTasks) {
-//   tasks.value = [...newTasks]; // trigger reactivity
-// }
+function updateTasks(newTasks) {
+  tasks.value = [...newTasks]; // trigger reactivity
+}
 
 function openAddTask(columnId) {
   activeColumnId.value = columnId;
@@ -73,16 +64,14 @@ function handleAddColumn(newCol) {
       @togglecol="toggleColumnModal"
       @search="handleSearch"
       @assignee="handleAssigneeSearch"
-      @theme="toggleTheme"
-      :theme="theme"
-      :onToggleTheme="toggleTheme"
+   
+     
     />
 
     <Column
       ref="columnRef"
       :showAddColunm="showAddColumn"
       :searchTerm="searchTerm"
-      :theme="theme"
       :searchAssine="searchAssignee"
       @openAddTask="openAddTask"
       @updateTasks="updateTasks"
@@ -92,7 +81,7 @@ function handleAddColumn(newCol) {
       v-if="TaskStore.showTask"
       :column-id="activeColumnId"
       @addTask="TaskStore.handleAddTask"
-      @close="toggleTaskModal"
+
     />
 
     <AddColumn

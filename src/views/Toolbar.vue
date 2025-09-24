@@ -19,10 +19,7 @@ const emit = defineEmits([
   "redo",
 ]);
 
-
-
-
-// register store here 
+// register store here
 
 const themeStore = useThemeStore();
 
@@ -33,7 +30,6 @@ function handlesearch() {
 function searchAssignee() {
   emit("assignee", SearchQueryAssgnee.value);
 }
-
 
 function togglecol() {
   emit("togglecol");
