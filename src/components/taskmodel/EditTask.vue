@@ -1,4 +1,6 @@
 <script setup>
+import { useKanbanStore } from "../../store/KanbanStore";
+const TaskStore = useKanbanStore();
 const props = defineProps({
   modelValue: { type: Boolean, required: true }, // for showing/hiding modal
   task: { type: Object, required: true },
@@ -11,10 +13,8 @@ function closeModal() {
   emit("update:modelValue", false);
 }
 
-// Save changes
 function saveTask() {
-  emit("update-task", { ...props.task }); // send updated task back
-  closeModal();
+  TaskStore.updateTask({ ...props.task });
 }
 </script>
 

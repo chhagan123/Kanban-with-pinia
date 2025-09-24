@@ -4,7 +4,8 @@ import { ref, watch } from "vue";
 export const useKanbanStore = defineStore("kanbanStore", () => {
   const tasks = ref([]);
   const showTask = ref(false);
-  const showEdit = ref(false)
+  const showEdit = ref(false);
+  const selecTedTask = ref(null);
 
   //  Add Task
   function handleAddTask(newTask) {
@@ -12,23 +13,29 @@ export const useKanbanStore = defineStore("kanbanStore", () => {
     showTask.value = false;
   }
 
-  // edit Task 
+  // edit Task
 
-  function showEditModel() {
-    showEdit.value = !showEdit.value
+  function editTask(task) {
+    selecTedTask.value = task;
+    showEdit.value = true;
+    console.log(task);
+    console.log(showEdit.value);
   }
 
-  function hanldeEditTask(task){
-
-
-  } 
+  function updateTask(updatedTask) {
+    const index = tasks.value.findIndex((t) => t.id === updatedTask.id);
+    if (index !== -1) {
+      tasks.value[index] = { ...updatedTask };
+    }
+    showEdit.value = false;
+    selecTedTask.value = null;
+  }
 
   //  Delete Task
   function handleDeleteTask(task) {
-    if(confirm(`are you sure to delete the Task ${task.title}`)){
-        tasks.value = tasks.value.filter((t) => t.id !== task.id);
+    if (confirm(`are you sure to delete the Task ${task.title}`)) {
+      tasks.value = tasks.value.filter((t) => t.id !== task.id);
     }
-   
   }
 
   // 🔹 Load tasks from localStorage
@@ -37,7 +44,7 @@ export const useKanbanStore = defineStore("kanbanStore", () => {
     if (saved) {
       tasks.value = JSON.parse(saved);
     }
-}
+  }
 
   //  Auto-save tasks when changed
   watch(
@@ -51,5 +58,16 @@ export const useKanbanStore = defineStore("kanbanStore", () => {
   //  Load tasks immediately when store initializes
   loadTasks();
 
-  return { tasks, showTask, handleAddTask, handleDeleteTask, loadTasks ,handleDeleteTask,showEdit};
+  return {
+    tasks,
+    showTask,
+    handleAddTask,
+    handleDeleteTask,
+    loadTasks,
+    handleDeleteTask,
+    showEdit,
+    editTask,
+    selecTedTask,
+    updateTask,
+  };
 });

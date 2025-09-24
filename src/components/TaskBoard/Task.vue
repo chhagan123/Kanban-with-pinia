@@ -2,8 +2,12 @@
 import { ref } from "vue";
 import { Pencil, Trash2, Eye } from "lucide-vue-next"; // icon package
 import { useKanbanStore } from "../../store/KanbanStore";
+import { useThemeStore } from "../../store/ThemeStore";
 
+
+// store
 const TaskStore = useKanbanStore();
+const themeStore = useThemeStore();
 
 const props = defineProps({
   task: {
@@ -12,11 +16,10 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["openedit"]);
 
-// edit emit
-function openedit() {
-  emit("openedit", props.task);
+
+function openedit (){
+  TaskStore.editTask(props.task)
 }
 
 

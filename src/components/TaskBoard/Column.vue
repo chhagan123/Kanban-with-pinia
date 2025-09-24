@@ -1,18 +1,20 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import { useKanbanStore } from "../../store/KanbanStore";
+import { useThemeStore } from "../../store/ThemeStore";
 import Task from "./Task.vue";
 import draggable from "vuedraggable";
 
-
+// Stores
 const TaskStore = useKanbanStore()
+const themeStore = useThemeStore();
 
 const props = defineProps({
   showAddColunm: Boolean,
   tasks: Array,
   searchTerm: String,
   searchAssine: String,
-  theme: Boolean, // 🔹 receive theme from parent
+ 
 });
 
 const emit = defineEmits(["openAddTask", "editTask", "delete", "deleteColumn"]);
@@ -109,7 +111,7 @@ function deletecolum(column) {
       :data-col-id="col.id"
       class="w-60 h-auto rounded-lg p-2 flex flex-col flex-shrink-0 border"
       :class="
-        props.theme
+        themeStore.theme
           ? 'bg-gray-50 border-gray-300 text-gray-900'
           : 'bg-gray-800 border-gray-600 text-gray-100'
       "
@@ -117,7 +119,7 @@ function deletecolum(column) {
       <!-- Column Header -->
       <div
         class="flex w-full mb-2 pb-2 justify-start gap-4 items-center border-b"
-        :class="props.theme ? 'border-gray-300' : 'border-gray-600'"
+        :class="themeStore.theme ? 'border-gray-300' : 'border-gray-600'"
       >
         <h1 class="font-bold ml-2">{{ col.name }}</h1>
         <div
@@ -149,7 +151,7 @@ function deletecolum(column) {
           <Task
             :task="element"
             :data-task-id="element.id"
-            :theme="props.theme"
+           
             @openedit="emit('editTask', $event)"
             @deletetask="emit('delete', $event)"
           />
