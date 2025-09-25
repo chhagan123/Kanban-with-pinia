@@ -30,10 +30,6 @@ function handlesearch() {
 function searchAssignee() {
   emit("assignee", SearchQueryAssgnee.value);
 }
-
-function togglecol() {
-  emit("togglecol");
-}
 </script>
 
 <template>
@@ -92,7 +88,7 @@ function togglecol() {
     >
       <!-- Add Column -->
       <button
-        @click="togglecol"
+        @click="emit('togglecol')"
         class="px-4 py-2 rounded-lg text-sm font-medium w-full sm:w-auto transition-colors duration-300"
         :class="
           themeStore.theme

@@ -4,7 +4,6 @@ import { Pencil, Trash2, Eye } from "lucide-vue-next"; // icon package
 import { useKanbanStore } from "../../store/KanbanStore";
 import { useThemeStore } from "../../store/ThemeStore";
 
-
 // store
 const TaskStore = useKanbanStore();
 const themeStore = useThemeStore();
@@ -16,13 +15,9 @@ const props = defineProps({
   },
 });
 
-
-
-function openedit (){
-  TaskStore.editTask(props.task)
+function openedit() {
+  TaskStore.editTask(props.task);
 }
-
-
 </script>
 
 <template>

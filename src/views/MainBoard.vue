@@ -5,13 +5,15 @@ import AddColumn from "../components/taskmodel/AddColum.vue";
 import EditTask from "../components/taskmodel/EditTask.vue";
 import Column from "../components/TaskBoard/Column.vue";
 import { useKanbanStore } from "../store/KanbanStore";
+import { useColumStore } from "../store/ColumStore";
 import { onMounted, ref, watch } from "vue";
 
 // State
 
+const columnStore = useColumStore();
+
 const activeColumnId = ref(null);
 const showAddColumn = ref(false);
-const columnRef = ref(null);
 const searchTerm = ref("");
 const searchAssignee = ref("");
 
@@ -30,18 +32,8 @@ function handleAssigneeSearch(query) {
   searchAssignee.value = query.toLowerCase();
 }
 
-// Toggle modals
-function toggleTaskModal() {
-  showEdit.value = !showEdit.value;
-}
-
 function toggleColumnModal() {
   showAddColumn.value = !showAddColumn.value;
-}
-
-// Task updates
-function updateTasks(newTasks) {
-  tasks.value = [...newTasks]; // trigger reactivity
 }
 
 function openAddTask(columnId) {
@@ -49,9 +41,8 @@ function openAddTask(columnId) {
   TaskStore.showTask = true;
 }
 
-// Column updates
-function handleAddColumn(newCol) {
-  columnRef.value.addColumn(newCol);
+function handleAddColumn(newcol) {
+  columnStore.addcolumn(newcol);
   showAddColumn.value = false;
 }
 </script>
@@ -64,24 +55,20 @@ function handleAddColumn(newCol) {
       @togglecol="toggleColumnModal"
       @search="handleSearch"
       @assignee="handleAssigneeSearch"
-   
-     
     />
 
     <Column
-      ref="columnRef"
+     
       :showAddColunm="showAddColumn"
       :searchTerm="searchTerm"
       :searchAssine="searchAssignee"
       @openAddTask="openAddTask"
-      @updateTasks="updateTasks"
     />
 
     <AddTask
       v-if="TaskStore.showTask"
       :column-id="activeColumnId"
       @addTask="TaskStore.handleAddTask"
-
     />
 
     <AddColumn

@@ -1,24 +1,23 @@
 <script setup>
-import { onMounted, ref, watch } from "vue";
+
 import { useKanbanStore } from "../../store/KanbanStore";
 import { useThemeStore } from "../../store/ThemeStore";
+import { useColumStore } from "../../store/ColumStore";
 import Task from "./Task.vue";
 import draggable from "vuedraggable";
 
 // Stores
-const TaskStore = useKanbanStore()
+const TaskStore = useKanbanStore();
 const themeStore = useThemeStore();
+const columnStore = useColumStore();
 
 const props = defineProps({
-  showAddColunm: Boolean,
-  tasks: Array,
   searchTerm: String,
   searchAssine: String,
- 
 });
 
 const emit = defineEmits(["openAddTask", "editTask", "delete", "deleteColumn"]);
-const columns = ref([]);
+
 
 // 🔹 Filter tasks per column
 function getFilteredTasks(colId) {
@@ -52,61 +51,15 @@ function onDragEnd(evt) {
   localStorage.setItem("kanban-tasks", JSON.stringify(TaskStore.tasks));
 }
 
-// 🔹 Load columns
-onMounted(() => {
-  TaskStore.loadTasks();
-  const saved = localStorage.getItem("kanban-col");
-  if (saved) {
-    columns.value = JSON.parse(saved);
-
-    const defaults = [
-      { id: "todo", name: "Todo" },
-      { id: "progress", name: "Progress" },
-      { id: "done", name: "Done" },
-    ];
-
-    defaults.forEach((def) => {
-      if (!columns.value.some((c) => c.id === def.id)) {
-        columns.value.push(def);
-      }
-    });
-  } else {
-    columns.value = [
-      { id: "todo", name: "Todo" },
-      { id: "progress", name: "Progress" },
-      { id: "done", name: "Done" },
-    ];
-  }
-});
-
-watch(
-  columns,
-  (newval) => {
-    localStorage.setItem("kanban-col", JSON.stringify(newval));
-  },
-  { deep: true }
-);
-
-// 🔹 Add column
-function addColumn(newColumn) {
-  columns.value.push(newColumn);
-}
-defineExpose({ addColumn });
-
 const notDeletecol = ["Todo", "Progress", "Done"];
 
-// 🔹 Delete column
-function deletecolum(column) {
-  if (confirm(`Are you sure you want to delete column "${column.name}"?`)) {
-    columns.value = columns.value.filter((c) => c.id !== column.id);
-  }
-}
+
 </script>
 
 <template>
   <div class="flex gap-6 w-full mt-4 p-4 items-start">
     <div
-      v-for="col in columns"
+      v-for="col in columnStore.columns"
       :key="col.id"
       :data-col-id="col.id"
       class="w-60 h-auto rounded-lg p-2 flex flex-col flex-shrink-0 border"
@@ -133,7 +86,7 @@ function deletecolum(column) {
         <button
           v-if="!notDeletecol.includes(col.name)"
           class="border bg-red-500 text-white px-2 rounded hover:bg-red-600"
-          @click="deletecolum(col)"
+          @click="columnStore.deletecolum(col)"
         >
           Delete
         </button>
@@ -151,7 +104,6 @@ function deletecolum(column) {
           <Task
             :task="element"
             :data-task-id="element.id"
-           
             @openedit="emit('editTask', $event)"
             @deletetask="emit('delete', $event)"
           />
