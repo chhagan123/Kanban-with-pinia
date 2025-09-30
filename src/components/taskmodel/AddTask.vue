@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import { useKanbanStore } from "../../store/KanbanStore";
 
@@ -13,11 +13,11 @@ const props = defineProps({
   },
 });
 
-const title = ref("");
-const description = ref("");
-const Assignees = ref("");
-const date = ref("");
-const Assignee = ["chhagan", "Nandu", "Rishabh"];
+const title = ref<string>("");
+const description = ref<string>("");
+const Assignees = ref<string>("");
+const date = ref<string>("");
+const Assignee: string[] = ["chhagan", "Nandu", "Rishabh"];
 
 const emit = defineEmits(["close", "addTask"]);
 
@@ -25,9 +25,9 @@ function close() {
   emit("close");
 }
 
-function AddTask() {
+function AddTask(): void {
   const Task = {
-    id: Date.now(),
+    id: Date.now().toString(),
     title: title.value,
     description: description.value,
     Assignees: Assignees.value,

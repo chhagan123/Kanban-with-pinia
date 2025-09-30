@@ -1,34 +1,46 @@
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
 
+// Define Task type
+
+export type Task = {
+  id:string;
+  title:string;
+  description:string;
+  Assignees:String;
+  date:any;
+  columnId: String | number
+
+}
+
 export const useKanbanStore = defineStore("kanbanStore", () => {
-  const tasks = ref([]);
-  const showTask = ref(false);
+  const tasks = ref<Task[]>([]);
+  const showTask= ref(false);
   const showEdit = ref(false);
-  const selecTedTask = ref(null);
+  const selecTedTask = ref<Task | null>(null);
 
   // toggle addTask model
-  function toggleAddTask() {
+  function toggleAddTask():void {
     showTask.value = !showTask.value;
     console.log(showTask.value);
-  }
+  } 
 
   //  Add Task
-  function handleAddTask(newTask) {
+  function handleAddTask(newTask:Task):void {
     tasks.value.push(newTask);
     showTask.value = false;
   }
 
   // edit Task
 
-  function editTask(task) {
+  function editTask(task:Task): void{
     selecTedTask.value = task;
     showEdit.value = true;
     console.log(task);
     console.log(showEdit.value);
   }
 
-  function updateTask(updatedTask) {
+  function updateTask(updatedTask:Task): void {
     const index = tasks.value.findIndex((t) => t.id === updatedTask.id);
     if (index !== -1) {
       tasks.value[index] = { ...updatedTask };
@@ -38,14 +50,14 @@ export const useKanbanStore = defineStore("kanbanStore", () => {
   }
 
   //  Delete Task
-  function handleDeleteTask(task) {
+  function handleDeleteTask(task:Task):void {
     if (confirm(`are you sure to delete the Task ${task.title}`)) {
       tasks.value = tasks.value.filter((t) => t.id !== task.id);
     }
   }
 
   // 🔹 Load tasks from localStorage
-  function loadTasks() {
+  function loadTasks():void {
     const saved = localStorage.getItem("kanban-tasks");
     if (saved) {
       tasks.value = JSON.parse(saved);

@@ -9,37 +9,31 @@ import { useColumStore } from "../store/ColumStore";
 import { onMounted, ref, watch } from "vue";
 
 // State
-
 const columnStore = useColumStore();
-
 const activeColumnId = ref(null);
 const showAddColumn = ref(false);
 const searchTerm = ref("");
 const searchAssignee = ref("");
-
 // CRUD Task Store
-
 const TaskStore = useKanbanStore();
-
-// -------------------- Functions --------------------
-
 // Search
 function handleSearch(query) {
   searchTerm.value = query.toLowerCase();
 }
-
+// handle assignee search
 function handleAssigneeSearch(query) {
   searchAssignee.value = query.toLowerCase();
 }
-
+// toggle column modal
 function toggleColumnModal() {
   showAddColumn.value = !showAddColumn.value;
 }
-
+// open add task modal
 function openAddTask(columnId) {
   activeColumnId.value = columnId;
   TaskStore.showTask = true;
 }
+// handle add column
 
 function handleAddColumn(newcol) {
   columnStore.addcolumn(newcol);
@@ -58,7 +52,6 @@ function handleAddColumn(newcol) {
     />
 
     <Column
-     
       :showAddColunm="showAddColumn"
       :searchTerm="searchTerm"
       :searchAssine="searchAssignee"
