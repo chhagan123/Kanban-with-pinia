@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 
 import { useKanbanStore } from "../../store/KanbanStore";
 import { useThemeStore } from "../../store/ThemeStore";
@@ -20,7 +20,7 @@ const emit = defineEmits(["openAddTask", "editTask", "delete", "deleteColumn"]);
 
 
 // 🔹 Filter tasks per column
-function getFilteredTasks(colId) {
+function getFilteredTasks(colId: string) {
   return TaskStore.tasks.filter((task) => {
     const matchesColumn = task.columnId === colId;
     const matchesAssignee = !props.searchAssine
@@ -36,7 +36,7 @@ function getFilteredTasks(colId) {
 }
 
 // 🔹 Handle drag end
-function onDragEnd(evt) {
+function onDragEnd(evt:any) {
   const { item, to } = evt;
   const newColId = to.closest("[data-col-id]")?.dataset.colId;
 

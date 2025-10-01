@@ -1,19 +1,17 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 import { Pencil, Trash2, Eye } from "lucide-vue-next"; // icon package
 import { useKanbanStore } from "../../store/KanbanStore";
 import { useThemeStore } from "../../store/ThemeStore";
+import type { Task } from "../../store/KanbanStore";
 
 // store
 const TaskStore = useKanbanStore();
 const themeStore = useThemeStore();
 
-const props = defineProps({
-  task: {
-    type: Object,
-    required: true,
-  },
-});
+const props = defineProps<{
+  task: Task;
+}>();
 
 function openedit() {
   TaskStore.editTask(props.task);
