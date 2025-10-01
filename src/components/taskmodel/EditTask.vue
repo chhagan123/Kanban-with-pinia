@@ -1,23 +1,49 @@
-<script setup>
+<script setup lang="ts">
 import { useKanbanStore } from "../../store/KanbanStore";
+import type { Task } from "../../store/KanbanStore";
+import { reactive, watch } from "vue";
+
 const TaskStore = useKanbanStore();
-const props = defineProps({
-  modelValue: { type: Boolean, required: true }, // for showing/hiding modal
-  task: { type: Object, required: true },
-});
+
+const props = defineProps<{
+  modelValue: boolean;
+  task: Task | null;
+}>();
 
 const emit = defineEmits(["update:modelValue", "update-task"]);
+
+// Local editable copy of task
+const localTask = reactive<Task>({
+  id: "",
+  title: "",
+  description: "",
+  Assignees: "",
+  date: "",
+  columnId: "",
+});
+
+// Watch for prop changes and sync
+watch(
+  () => props.task,
+  (newTask) => {
+    if (newTask) {
+      Object.assign(localTask, newTask);
+    }
+  },
+  { immediate: true }
+);
 
 // Close modal
 function closeModal() {
   emit("update:modelValue", false);
 }
 
+// Save updated task
 function saveTask() {
-  TaskStore.updateTask({ ...props.task });
+  TaskStore.updateTask({ ...localTask });
+  closeModal();
 }
 </script>
-
 <template>
   <div
     v-if="modelValue"
@@ -27,39 +53,31 @@ function saveTask() {
       <h2 class="text-lg font-bold mb-4">Edit Task</h2>
 
       <div class="space-y-3">
-        <!-- Title -->
         <input
-          v-model="task.title"
-          required
+          v-model="localTask.title"
           type="text"
           placeholder="Title"
           class="w-full p-2 border rounded"
+          required
         />
-
-        <!-- Description -->
         <textarea
-          v-model="task.description"
+          v-model="localTask.description"
           placeholder="Description"
           class="w-full p-2 border rounded"
         ></textarea>
-
-        <!-- Assignees -->
         <input
-          v-model="task.Assignees"
+          v-model="localTask.Assignees"
           type="text"
           placeholder="Assignee"
           class="w-full p-2 border rounded"
         />
-
-        <!-- Date -->
         <input
-          v-model="task.date"
+          v-model="localTask.date"
           type="date"
           class="w-full p-2 border rounded"
         />
       </div>
 
-      <!-- Buttons -->
       <div class="flex justify-end gap-2 mt-4">
         <button
           @click="closeModal"
