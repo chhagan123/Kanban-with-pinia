@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import Toolbar from "./Toolbar.vue";
 import AddTask from "../components/taskmodel/AddTask.vue";
 import AddColumn from "../components/taskmodel/AddColum.vue";
@@ -10,10 +10,10 @@ import { onMounted, ref, watch } from "vue";
 
 // State
 const columnStore = useColumStore();
-const activeColumnId = ref(null);
-const showAddColumn = ref(false);
-const searchTerm = ref("");
-const searchAssignee = ref("");
+const activeColumnId = ref<any>(null);
+const showAddColumn = ref<boolean>(false);
+const searchTerm = ref<string>("");
+const searchAssignee = ref<string>("");
 // CRUD Task Store
 const TaskStore = useKanbanStore();
 // Search
@@ -29,13 +29,13 @@ function toggleColumnModal() {
   showAddColumn.value = !showAddColumn.value;
 }
 // open add task modal
-function openAddTask(columnId) {
+function openAddTask(columnId:string) {
   activeColumnId.value = columnId;
   TaskStore.showTask = true;
 }
 // handle add column
 
-function handleAddColumn(newcol) {
+function handleAddColumn(newcol:{ id: string; name: string }) {
   columnStore.addcolumn(newcol);
   showAddColumn.value = false;
 }

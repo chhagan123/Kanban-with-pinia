@@ -1,7 +1,7 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
 
-const newColumn = ref("");
+const newColumn = ref<string>("");
 const emit = defineEmits(["addColumn", "close"]);
 import { useColumStore } from "../../store/ColumStore";
 

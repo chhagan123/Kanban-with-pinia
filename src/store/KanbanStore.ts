@@ -15,8 +15,8 @@ export type Task = {
 
 export const useKanbanStore = defineStore("kanbanStore", () => {
   const tasks = ref<Task[]>([]);
-  const showTask= ref(false);
-  const showEdit = ref(false);
+  const showTask= ref<boolean>(false);
+  const showEdit = ref<boolean>(false);
   const selecTedTask = ref<Task | null>(null);
 
   // toggle addTask model

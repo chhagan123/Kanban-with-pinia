@@ -1,20 +1,24 @@
+import { Type } from "lucide-vue-next";
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
+import Column from "../components/TaskBoard/Column.vue";
+
+export type Colum = {
+  id: string;
+  name: string;
+};
 
 export const useColumStore = defineStore("column", () => {
-  const columns = ref([]);
+  const columns = ref<Colum[]>([]);
 
   // add new colum
-  function addcolumn(newcolum) {
-    console.log(newcolum);
-
+  function addcolumn(newcolum: Colum) {
     columns.value.push(newcolum);
-    console.log(columns.value);
   }
 
   // delete colum
 
-  function deletecolum(column) {
+  function deletecolum(column: Colum) {
     if (confirm(`Are you sure you want to delete column "${column.name}"?`)) {
       columns.value = columns.value.filter((c) => c.id !== column.id);
     }
@@ -35,7 +39,7 @@ export const useColumStore = defineStore("column", () => {
     const savedcol = localStorage.getItem("kanban-col");
     console.log("yehai", savedcol);
     if (savedcol) {
-      columns.value = JSON.parse(savedcol);
+      columns.value = JSON.parse(savedcol) as Colum[];
     } else {
       columns.value = [
         { id: "todo", name: "Todo" },
